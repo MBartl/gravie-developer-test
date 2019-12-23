@@ -21,6 +21,7 @@ The very next feature I would work on would be implementing 'cart persistence' b
 
 Other features considered but not implemented:
 - Creating defined areas for the header, search bar, results
+- Add styling for viewports below 600px
 - Ability to search by genre or decade
 - Home screen with 'most popular' view
 - Backend to keep track of customer orders
