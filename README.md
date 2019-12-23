@@ -20,7 +20,7 @@ Packages used: react-router-dom & dotenv
 The very next feature I would work on would be implementing 'cart persistence' by storing information in a customer's cart with the universal-cookie package (installed but unused). This would allow the cart to stay populated despite refreshing or navigating away from the page.
 
 Other features considered but not implemented:
-- Creating defined areas for the header, search bar, results, etc.
+- Creating defined areas for the header, search bar, results
 - Ability to search by genre or decade
 - Home screen with 'most popular' view
 - Backend to keep track of customer orders
