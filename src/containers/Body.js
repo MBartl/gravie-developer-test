@@ -270,9 +270,8 @@ class Body extends Component {
                   <span style={{float: 'right'}}>{`$${primary}`}</span>
                   <br />
                   <span style={{float: 'left'}}>{`Tax (8.025%)`}</span>
-                  <span style={{float: 'right'}}>{`$${tax}`}</span>
+                  <span style={{float: 'right', textDecoration: 'underline'}}>{`$${tax}`}</span>
                   <br />
-                  <hr />
                   <span style={{float: 'right', maxWidth: '40%'}}>
                     {`Total: $${total}`}
                   </span>
