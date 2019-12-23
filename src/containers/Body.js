@@ -178,9 +178,9 @@ class Body extends Component {
             length > 0 ? <Fragment>
               <Grid style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', alignItems: 'center',}}>
 
-                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: '0.2em'}} className='scrollIcon l'>
+                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon l'>
                   <Icon name='angle double left' size='big'
-                    onClick={(e) => this.scroll(e.target)} style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible'}} />
+                    onClick={(e) => this.scroll(e.target)} style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', padding: 0}} />
                 </button>
 
                 <Grid.Row columns={2} only='mobile' style={{alignItems: 'center', maxWidth: '76%'}}>
@@ -239,10 +239,10 @@ class Body extends Component {
                   </Grid.Column>
                 </Grid.Row>
 
-                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: '0.2em'}} className='scrollIcon'>
+                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon'>
                   <Icon name='angle double right' size='big'
                     onClick={(e) => this.scroll(e.target)}
-                    style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', paddingLeft: '0.15em'}} />
+                    style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', padding: 0, paddingLeft: '0.15em'}} />
                 </button>
 
               </Grid>
@@ -273,7 +273,7 @@ class Body extends Component {
               <h2>No Items in Cart</h2>
             :
             this.props.displayCart === true && length > 0 ?
-              <div style={{maxWidth: '60%', marginLeft: '40%', marginRight: '20%'}}>
+              <div style={{width: 'max-content', maxWidth: '70%', marginLeft: '33%', marginRight: '30%'}}>
                 <hr />
                 <p style={{lineHeight: '2em', margin: '0.15em'}}>
                   <span style={{float: 'left'}}>{`${length} games at $4.99 each: `}</span>
