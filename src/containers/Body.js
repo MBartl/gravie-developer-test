@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 
-import { GIANT_BOMB } from '../constants'
+// import { GIANT_BOMB } from '../constants'
 import GameTiles from '../components/GameTiles'
 import { Pagination, Grid, Segment, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
@@ -48,7 +48,10 @@ class Body extends Component {
     })
 
     const proxyurl = `https://cors-anywhere.herokuapp.com/`
-    const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
+
+    // const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
+
+    const url = `https://www.giantbomb.com/api/search/?api_key=f876731fdb2f8aa7f2304a0d4b7efd0db47a20ce&format=json&query=${terms.toLowerCase()}&resources=game`
 
     fetch(proxyurl + url)
     .then(res => res.json())
