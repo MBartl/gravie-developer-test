@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Body from './Body'
 
 class Cart extends Component {
+  // the cart is just a reused search result with slight props adjustments
 
   render() {
     return (

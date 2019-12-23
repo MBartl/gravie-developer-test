@@ -14,6 +14,7 @@ class Body extends Component {
     searched: false
   }
 
+  // add name and image to cart (in App state arrays)
   addGame = (event) => {
     let name = event.target.parentElement.children[2].innerText
     let image = event.target.parentElement.firstElementChild.src
@@ -21,12 +22,14 @@ class Body extends Component {
     this.props.addToCart(name, image)
   }
 
+  // handles search terms
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value
     })
   }
 
+  // checks for enter key pressed (alternative to search button)
   checkEnter = (e) => {
     let key = e.key
     if (key === 'Enter') {
@@ -35,6 +38,7 @@ class Body extends Component {
     }
   }
 
+  // fetch game list
   handleFetch = (search) => {
     this.setState({loading: true, searched: true})
     let terms
@@ -47,6 +51,7 @@ class Body extends Component {
       images: []
     })
 
+    // Proxy URL required due to CORS restriction
     const proxyurl = `https://cors-anywhere.herokuapp.com/`
 
     // const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
@@ -59,6 +64,7 @@ class Body extends Component {
       let newGames = data.results.map(game => game.name)
       let images = data.results.map(game => game.image.medium_url)
 
+      // set the fetched data as two parallel arrays
       this.setState({
         games: [...newGames],
         images: [...images],
@@ -67,12 +73,14 @@ class Body extends Component {
     })
   }
 
+  // just a simple alert now --> could plug in a payment service i.e. Stripe
   handleCheckout = () => {
     alert('Thanks for shopping with us!')
 
     this.props.emptyCart()
   }
 
+  // if the mode is set to displaying a customer's cart then reset the state to the cart info from App.js file
   componentDidMount() {
     if (this.props.displayCart === true) {
         this.setState({
@@ -82,6 +90,7 @@ class Body extends Component {
     }
   }
 
+  // transforms the arrays based on left or right button
   scroll = (target) => {
     let direction = target.className.includes('right') ? 0 : this.state.games.length-1
 
@@ -104,14 +113,16 @@ class Body extends Component {
     this.state.games ? length = this.state.games.length : length = 0
     let searched = this.state.searched
 
+    // for the purposes of having some price to display game rentals are set at $4.99 for a 1 week rental --> could add to this with varying rental periods and adjusted rates
     let primary = (length*4.99).toFixed(2)
     let tax = (Math.round(primary*.08025 * 100) / 100).toFixed(2)
 
     let total = (parseFloat(primary) + parseFloat(tax)).toFixed(2)
 
-    let date = new Date().getDate();
-    let month = new Date().getMonth() + 1; //Current Month
-    let year = new Date().getFullYear();
+    // quick date math to display a 7 day rental period
+    let date = new Date().getDate()
+    let month = new Date().getMonth() + 1
+    let year = new Date().getFullYear()
 
     date += 7
 
@@ -184,7 +195,6 @@ class Body extends Component {
                     </Segment>
                   </Grid.Column>
                 </Grid.Row>
-
 
                 <Grid.Row columns={4} only='computer' style={{alignItems: 'center', maxWidth: '76%'}}>
                   <Grid.Column>

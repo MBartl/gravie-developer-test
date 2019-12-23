@@ -4,6 +4,7 @@ import { Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class NavBar extends Component {
+  // simple two button navbar
 
   render() {
     return (

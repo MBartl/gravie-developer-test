@@ -7,7 +7,7 @@ import Cart from './containers/Cart'
 
 import { Switch, Redirect, Route } from 'react-router-dom'
 
-// import Cookies from 'universal-cookie';
+// import Cookies from 'universal-cookie'
 
 class App extends Component {
   state = {
@@ -34,19 +34,23 @@ class App extends Component {
     })
   }
 
-  removeFromCart = (target) => {
+  removeFromCart = (game) => {
     let newCart = this.state.cart
+    let newCartImg = this.state.cartImg
+
+    let target = newCart.indexOf(game)
+
     newCart.splice(target, 1)
 
-    let newCartImg = this.state.cartImg
     newCartImg.splice(target, 1)
 
     this.setState({
-      cart: [...newCart],
-      cartImg: [...newCartImg]
+      cart: newCart,
+      cartImg: newCartImg
     })
   }
 
+  // resets the entire cart --> only triggers after checkout
   emptyCart = () => {
     this.setState({
       cart: [],
@@ -75,4 +79,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

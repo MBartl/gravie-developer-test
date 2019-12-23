@@ -8,22 +8,21 @@ class GameTiles extends Component {
   }
 
   handleRent = (e) => {
-    if (this.props.displayCart === true) {
-      return
-    }
-    else {
-      let game = e.target.parentElement.lastElementChild.innerText
-      let image = e.target.parentElement.parentElement.firstElementChild.src
+    let game = e.target.parentElement.lastElementChild.innerText
+    let image = e.target.parentElement.parentElement.firstElementChild.src
 
-      this.props.addGame(game, image)
-    }
+    this.props.addGame(game, image)
   }
 
   handleRemove = (e) => {
-    let game = e.target.parentElement.lastElementChild.innerText
-    let target = this.props.games.indexOf(game)
+    let parent = e.target.parentElement
+    let game
 
-    this.props.remove(target)
+    e.target.parentElement.className === 'rentButton' ?
+    game = parent.parentElement.lastElementChild.innerText :
+    game = parent.lastElementChild.innerText
+
+    this.props.remove(game)
   }
 
   render() {
@@ -38,6 +37,7 @@ class GameTiles extends Component {
               <div style={{textAlign: 'left'}}>
 
                 <button className='rentButton'
+                  disabled={this.props.cart.includes(game) && !this.props.displayCart === true}
                   onClick=
                   {
                     this.props.displayCart === true ?
