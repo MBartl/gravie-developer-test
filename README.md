@@ -1,25 +1,30 @@
 # Gravie Software Engineer Challenge
 
 ## Instructions
-After completing the challenge below, please send us an email with the location of your repository. If your repository is private, be sure to add us as collaborators so we can view your code.
+clone a copy of the repo
 
-### Time Box
-3-4 Hours
+use `$ yarn install` to set up dependencies
 
-## Synopsis
+then `$ yarn start` to run the repo locally
 
-For this challenge you will implement the Giant Bomb API to create an application that will allow a user to search games and "rent" them. The application should consist of at least two unique pages (`search` and `checkout`). Your view should display the game thumbnail and title, and the rest is up to you. You can use any language and or framework you'd like.
+### Explanation
 
-![Giant Bomb](https://upload.wikimedia.org/wikipedia/en/4/4b/Giant_Bomb_logo.png)
+Created with React
 
-You can get started by signing up for an API key [here](https://www.giantbomb.com/api/).
+Styled with Semantic UI
 
-### Resources
+Favicon from: https://commons.wikimedia.org/wiki/File:Video-Game-Controller-Icon-IDV-edit-dark.svg
 
-You can find the quickstart guide [here](https://www.giantbomb.com/forums/api-developers-3017/quick-start-guide-to-using-the-api-1427959/).
+Packages used: react-router-dom & dotenv
 
-You can find a full list of API features [here](https://www.giantbomb.com/api/documentation).
+The very next feature I would work on would be implementing 'cart persistence' by storing information in a customer's cart with the universal-cookie package (installed but unused). This would allow the cart to stay populated despite refreshing or navigating away from the page.
 
-### Questions
+Other features considered but not implemented:
+- Creating defined areas for the header, search bar, results, etc.
+- Ability to search by genre or decade
+- Home screen with 'most popular' view
+- Backend to keep track of customer orders
 
-Don't hesitate to reach out with any questions. Remember we are more focused on seeing your development process than checking off a list of requirements, so be sure you are able to speak to your code and your thoughts behind it.
+The API key was originally hidden in an .env file - that structure is still set up, but for ease of review I've put the key inside of an uploaded file instead.
+
+Please contact me with any issues or questions!
