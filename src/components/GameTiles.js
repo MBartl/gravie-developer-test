@@ -7,6 +7,10 @@ class GameTiles extends Component {
     loading: false
   }
 
+  componentDidMount() {
+    this.props.setColumnCount(this.props.tColumns)
+  }
+
   handleRent = (e) => {
     let game = e.target.parentElement.lastElementChild.innerText
     let image = e.target.parentElement.parentElement.firstElementChild.src
@@ -33,7 +37,15 @@ class GameTiles extends Component {
             let alt = `cover art for ${this.props.games[i]}`
 
             return (i+1 === this.props.column && i <= this.props.tColumns) ? <Card style={{alignSelf: 'center'}} key={i}>
-              <img src={this.props.images[i]} alt={alt} style={{width: '100%'}}></img>
+
+              {
+                (i === 0 && this.props.prevQueLoad === true) || (i+1 === this.props.tColumns && this.props.nextQueLoad === true) ?
+                  <div style={{width: '15em', height: '15em'}}>
+                    <Icon loading name='spinner' size='large' style={{color: 'black', marginTop: '4.75em'}} />
+                  </div>
+                :
+                <img src={this.props.images[i]} alt={alt} style={{width: '100%', minHeight: '10em'}}></img>
+              }
               <div style={{textAlign: 'left'}}>
 
                 <button className='rentButton'

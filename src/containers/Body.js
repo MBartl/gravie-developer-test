@@ -11,7 +11,10 @@ class Body extends Component {
     images: [],
     search: '',
     loading: false,
-    searched: false
+    searched: false,
+    prevQueLoad: false,
+    nextQueLoad: false,
+    columns: 0
   }
 
   // add name and image to cart (in App state arrays)
@@ -51,14 +54,7 @@ class Body extends Component {
       images: []
     })
 
-    // Proxy URL required due to CORS restriction
-    const proxyurl = `https://cors-anywhere.herokuapp.com/`
-
-    // const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
-
-    const url = `https://www.giantbomb.com/api/search/?api_key=f876731fdb2f8aa7f2304a0d4b7efd0db47a20ce&format=json&query=${terms.toLowerCase()}&resources=game`
-
-    fetch(proxyurl + url)
+    fetch(this.getUrl(terms))
     .then(res => res.json())
     .then(data => {
       let newGames = data.results.map(game => game.name)
@@ -68,9 +64,22 @@ class Body extends Component {
       this.setState({
         games: [...newGames],
         images: [...images],
-        loading: false
+        loading: false,
+        prevQueLoad: false,
+        nextQueLoad: false
       })
     })
+  }
+
+  getUrl = (terms) => {
+    // Proxy URL required due to CORS restriction
+    const proxyurl = `https://cors-anywhere.herokuapp.com/`
+
+    // const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
+
+    const url = `https://www.giantbomb.com/api/search/?api_key=f876731fdb2f8aa7f2304a0d4b7efd0db47a20ce&format=json&query=${terms.toLowerCase()}&resources=game`
+
+    return proxyurl + url
   }
 
   // just a simple alert now --> could plug in a payment service i.e. Stripe
@@ -105,6 +114,44 @@ class Body extends Component {
     this.setState({
       games: newGames,
       images: newImages
+    })
+
+    this.scrollTarget(target, newGames)
+  }
+
+  setColumnCount = (num) => {
+    this.setState({
+      columns: num
+    })
+  }
+
+  scrollTarget = (target, newGames) => {
+    target.name === 'next' || target.parentElement.name === 'next' ? this.nextQueLoad(newGames[this.state.columns]) : this.prevQueLoad(newGames[0])
+  }
+
+  prevQueLoad = (name) => {
+    this.setState({
+      prevQueLoad: true
+    })
+
+    this.fetchNewImage(name)
+  }
+
+  nextQueLoad = (name) => {
+    this.setState({
+      nextQueLoad: true
+    })
+
+    this.fetchNewImage(name)
+  }
+
+  fetchNewImage = (gameName) => {
+    fetch(this.getUrl(gameName))
+    .then(() => {
+      this.setState({
+        prevQueLoad: false,
+        nextQueLoad: false
+      })
     })
   }
 
@@ -178,7 +225,7 @@ class Body extends Component {
             length > 0 ? <Fragment>
               <Grid style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', alignItems: 'center',}}>
 
-                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon l'>
+                <button name='prev' style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon l'>
                   <Icon name='angle double left' size='big'
                     onClick={(e) => this.scroll(e.target)} style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', padding: 0}} />
                 </button>
@@ -186,12 +233,14 @@ class Body extends Component {
                 <Grid.Row columns={2} only='mobile' style={{alignItems: 'center', maxWidth: '76%'}}>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={2} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={2} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={2} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={2} />
                     </Segment>
                   </Grid.Column>
                 </Grid.Row>
@@ -199,22 +248,26 @@ class Body extends Component {
                 <Grid.Row columns={4} only='computer' style={{alignItems: 'center', maxWidth: '76%'}}>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={4} />
+                      <GameTiles games={this.state.games} images={this.state.images} nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={4} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={4} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={4} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={3} tColumns={4} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={3} tColumns={4} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={4} tColumns={4} />
+                      <GameTiles games={this.state.games} images={this.state.images} nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={4} tColumns={4} />
                     </Segment>
 
                   </Grid.Column>
@@ -223,23 +276,26 @@ class Body extends Component {
                   <Grid.Column>
 
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={3} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={1} tColumns={3} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={3} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={2} tColumns={3} />
                     </Segment>
                   </Grid.Column>
                   <Grid.Column>
                     <Segment style={{backgroundColor: '#282c34'}}>
-                      <GameTiles games={this.state.games} images={this.state.images}  displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={3} tColumns={3} />
+                      <GameTiles games={this.state.games} images={this.state.images}  nextQueLoad={this.state.nextQueLoad} prevQueLoad={this.state.prevQueLoad}
+                        setColumnCount={this.setColumnCount} displayCart={this.props.displayCart} remove={this.props.remove} addGame={this.props.addGame} cart={this.props.cart} column={3} tColumns={3} />
                     </Segment>
 
                   </Grid.Column>
                 </Grid.Row>
 
-                <button style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon'>
+                <button name='next' style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', borderRadius: '2em', padding: 0}} className='scrollIcon'>
                   <Icon name='angle double right' size='big'
                     onClick={(e) => this.scroll(e.target)}
                     style={{visibility: !this.state.games && length === 0 ? 'hidden' : 'visible', padding: 0, paddingLeft: '0.15em'}} />
