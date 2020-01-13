@@ -14,7 +14,8 @@ class Body extends Component {
     searched: false,
     prevQueLoad: false,
     nextQueLoad: false,
-    columns: 0
+    columns: 0,
+    searchedTextFile: ''
   }
 
   // add name and image to cart (in App state arrays)
@@ -77,6 +78,8 @@ class Body extends Component {
 
     // const url = `https://www.giantbomb.com/api/search/?api_key=${GIANT_BOMB}&format=json&query=${terms.toLowerCase()}&resources=game`
 
+    if (!terms) {terms = this.state.search}
+
     const url = `https://www.giantbomb.com/api/search/?api_key=f876731fdb2f8aa7f2304a0d4b7efd0db47a20ce&format=json&query=${terms.toLowerCase()}&resources=game`
 
     return proxyurl + url
@@ -97,6 +100,8 @@ class Body extends Component {
           images: this.props.cartImg
         })
     }
+
+    // this.readSearchTextFile()
   }
 
   // transforms the arrays based on left or right button
@@ -129,6 +134,7 @@ class Body extends Component {
     target.name === 'next' || target.parentElement.name === 'next' ? this.nextQueLoad(newGames[this.state.columns]) : this.prevQueLoad(newGames[0])
   }
 
+  // Buffer change in picture
   prevQueLoad = (name) => {
     this.setState({
       prevQueLoad: true
@@ -155,6 +161,35 @@ class Body extends Component {
     })
   }
 
+  getRentalPeriod = () => {
+    let period = new Date()
+    period.setDate(period.getDate() + 7)
+    let dateMonthYear = period.toString().split(' ').splice(1, 3)
+    dateMonthYear[1] += ','
+    dateMonthYear = dateMonthYear.join(' ')
+    return dateMonthYear
+  }
+
+  /* Proof of concept for reading to a text file in React.
+  Text files can be read from but not written to. Public text files will bundle with the rest of the JavaScript in browser but cannot be written to since they're not hosted anywhere.
+  Better explanation here:
+  https://stackoverflow.com/questions/49491710/can-reactjs-write-into-file
+
+  Possible workarounds here:
+  https://stackoverflow.com/questions/49023015/how-to-create-and-update-a-text-file-using-react-js
+
+  readSearchTextFile = () => {
+    fetch('../sumSearches.txt')
+    .then(res => res.text())
+    .then(text => {
+      console.log(text)
+      this.setState({
+        searchedTextFile: text
+      })
+    })
+  }
+  */
+
   render() {
     let length
     this.state.games ? length = this.state.games.length : length = 0
@@ -167,29 +202,7 @@ class Body extends Component {
     let total = (parseFloat(primary) + parseFloat(tax)).toFixed(2)
 
     // quick date math to display a 7 day rental period
-    let date = new Date().getDate()
-    let month = new Date().getMonth() + 1
-    let year = new Date().getFullYear()
-
-    date += 7
-
-    if (date > 30 && [4, 6, 9, 11].includes(month)) {
-      date -= 30
-      month += 1
-    } else if (date > 28 && month === 2) {
-      year % 4 === 0 ? date -= 29 : date -= 28
-      month += 1
-    } else if (date > 31) {
-      date -= 31
-      month += 1
-    }
-
-    if (month > 12) {
-      year += 1
-      month = 1
-    }
-
-    let calendarDay = `${month}/${date}/${year}`
+    let rentalPeriod = this.getRentalPeriod()
 
     return (
       <Fragment>
@@ -342,7 +355,7 @@ class Body extends Component {
                     {`Total: $${total}`}
                   </span>
                   <br />
-                  <span style={{float: 'right'}}>{`Your rental period will end ${calendarDay}`}</span>
+                  <span style={{float: 'right'}}>{`Your rental period will end ${rentalPeriod}`}</span>
                   <br />
                 </p>
                 <Link to='/home'>

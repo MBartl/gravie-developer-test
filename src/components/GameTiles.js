@@ -40,8 +40,8 @@ class GameTiles extends Component {
 
               {
                 (i === 0 && this.props.prevQueLoad === true) || (i+1 === this.props.tColumns && this.props.nextQueLoad === true) ?
-                  <div style={{width: '15em', height: '15em'}}>
-                    <Icon loading name='spinner' size='large' style={{color: 'black', marginTop: '4.75em'}} />
+                  <div style={{width: '12em', height: '12em'}}>
+                    <Icon loading name='spinner' size='large' style={{color: 'black', marginTop: '3.75em', marginRight: '0.3em'}} />
                   </div>
                 :
                 <img src={this.props.images[i]} alt={alt} style={{width: '100%', minHeight: '10em'}}></img>

@@ -1,0 +1,5 @@
+Totals of Searches:
+earthbound 4,
+zelda 1,
+mario 2,
+battletoads 6
